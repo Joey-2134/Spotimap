@@ -1,8 +1,7 @@
-import './style.css';
-import Map from 'ol/Map.js';
-import OSM from 'ol/source/OSM.js';
-import TileLayer from 'ol/layer/Tile.js';
-import View from 'ol/View.js';
+import Map from '/ol/Map.js';
+import OSM from '/ol/source/OSM.js';
+import TileLayer from '/ol/layer/Tile.js';
+import View from '/ol/View.js';
 
 const map = new Map({
   target: 'map',
@@ -16,7 +15,6 @@ const map = new Map({
     zoom: 2,
   }),
 });
-
 
 // Async function to check session state
 async function checkSessionState() {
