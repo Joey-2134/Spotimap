@@ -1,23 +1,25 @@
-import Map from '/ol/Map.js';
-import OSM from '/ol/source/OSM.js';
-import TileLayer from '/ol/layer/Tile.js';
-import View from '/ol/View.js';
+import './style.css';
+import Logo from './assets/spotimaplogo.png';
+// import Map from 'ol/Map.js';
+// import OSM from 'ol/source/OSM.js';
+// import TileLayer from 'ol/layer/Tile.js';
+// import View from 'ol/View.js';
 
-const map = new Map({
-  target: 'map',
-  layers: [
-    new TileLayer({
-      source: new OSM(),
-    }),
-  ],
-  view: new View({
-    center: [0, 0],
-    zoom: 2,
-  }),
-});
-
+// const map = new Map({
+//   target: 'map',
+//   layers: [
+//     new TileLayer({
+//       source: new OSM(),
+//     }),
+//   ],
+//   view: new View({
+//     center: [0, 0],
+//     zoom: 2,
+//   }),
+// });
 // Async function to check session state
 async function checkSessionState() {
+    document.getElementById('logo').src = Logo;
     try {
         const response = await fetch('/session/state');
         const data = await response.json();

@@ -11,7 +11,9 @@ musicbrainzRouter.post('/artists', async (req, res) => {
         for (let artist of artists) {
             await delay(1000);
             const artistData = await fetchArtistArea(artist);
-            artistAreas.push(artistData.artists[0].area.name);
+            if (artistData.artists[0] && artistData.artists[0].area) {
+                artistAreas.push(artistData.artists[0].area.name);
+            }
         }
         //console.log('Artist Areas:', artistAreas); //test log
         res.json({ artistAreas });

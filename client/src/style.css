@@ -1,5 +1,3 @@
-@import "node_modules/ol/ol.css";
-
 body, html {
     margin: 0;
     height: 100%;
@@ -20,7 +18,7 @@ body, html {
     border-radius: 50%;
     height: 50px;
     width: 50px;
-    object-fit: cover; /* Ensures the image covers the area without distortion */
+    object-fit: cover; /* Ensures the image covers the area without distortion */;
 }
 
 /* Add a border to the profile picture if you like */
@@ -80,12 +78,5 @@ body, html {
 .playlist-item:hover {
     opacity: 0.8; /* Optional: change the opacity on hover for a visual effect */
 }
-
-#map {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 100%;
-  }
 
 

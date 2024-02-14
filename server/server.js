@@ -2,22 +2,24 @@ require('dotenv').config();
 const express = require('express');
 const axios = require('axios');
 const querystring = require('querystring');
+
 const app = express();
 const spotifyRouter = require('./spotifyRouter');
 const musicbrainzRouter = require('./musicbrainzRouter');
+
 const session = require('express-session')
 const cookieParser = require('cookie-parser');
 const path = require('path');
+
 const client_id = process.env.CLIENT_ID;
 const client_secret = process.env.CLIENT_SECRET;
 const sessionSecret = process.env.SESSION_SECRET;
+
 const redirect_uri = 'http://localhost:3000/callback';
 const stateKey = 'spotify_auth_state';
-
-
 const PORT = process.env.PORT || 3000;
 
-app.use(express.static(path.join(__dirname, '..', 'client'))); //serve the static files in the client folder
+app.use(express.static(path.join(__dirname, '..', 'client', 'dist')));
 app.use(cookieParser()); //use cookie-parser middleware
 app.use(session({
   secret: sessionSecret,

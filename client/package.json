@@ -1,5 +1,22 @@
 {
   "dependencies": {
     "ol": "^8.2.0"
-  }
+  },
+  "devDependencies": {
+    "css-loader": "^6.10.0",
+    "style-loader": "^3.3.4",
+    "webpack": "^5.90.1",
+    "webpack-cli": "^5.1.4"
+  },
+  "name": "client",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
 }
