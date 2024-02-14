@@ -4,6 +4,7 @@ const axios = require('axios');
 const querystring = require('querystring');
 const app = express();
 const spotifyRouter = require('./spotifyRouter');
+const musicbrainzRouter = require('./musicbrainzRouter');
 const session = require('express-session')
 const cookieParser = require('cookie-parser');
 const path = require('path');
@@ -24,11 +25,13 @@ app.use(session({
   saveUninitialized: true, 
   cookie: { httpOnly: true, maxAge: 60000, secure: false }  //add secure: true when switching to https
 }));
+app.use(express.json());
 app.use((req, res, next) => {
   //console.log(req.session); // Log the session object
   next();
 });
-app.use('/spotify', spotifyRouter); //use the spotifyRouter middleware
+app.use('/spotify', spotifyRouter);
+app.use('/musicbrainz', musicbrainzRouter); 
 
 app.get('/login', function(req, res) { //
   const state = generateRandomString(16);
@@ -84,7 +87,7 @@ app.get('/callback', function(req, res) {
 });
 
 app.get('/session/state', (req, res) => { //check if the session is authenticated
-  res.json({ isAuthenticated: !!req.session.isAuthenticated });
+  res.json({ isAuthenticated: !!req.session.isAuthenticated }); 
 });
 
 

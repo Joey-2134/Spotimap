@@ -62,7 +62,19 @@ function createPlaylistItem(playlist) {
     playlistName.className = 'playlist-name';
     playlistItem.appendChild(playlistName);
 
-    playlistItem.addEventListener('click', () => handlePlaylistClick(playlist.id, playlist.name));
+    playlistItem.addEventListener('click', async () => { // Note the async keyword here
+        try {
+            const artists = await handlePlaylistClick(playlist.id, playlist.name); // Wait for the promise to resolve
+            if (artists) {
+                await sendArtistsToBackend(artists); // Now we can send the artists to the backend
+                console.log(artists);
+            }
+        } catch (error) {
+            console.error('Error processing playlist click:', error);
+        }
+    });
+    
+
     document.getElementById('playlists').appendChild(playlistItem);
 }
 
@@ -70,15 +82,45 @@ function createPlaylistItem(playlist) {
 async function handlePlaylistClick(playlistId, playlistName) {
     console.log(`Playlist clicked: ${playlistName}`);
     try {
-        const response = await fetch(`/spotify/user/playlists/${playlistId}`);
-        if (!response.ok) throw new Error('Failed to fetch playlist');
-        const playlistData = await response.json();
-        console.log('Playlist data:', playlistData);
+        const response = await fetch(`/spotify/user/playlists/${playlistId}/tracks`);
         document.getElementById('playlists').style.display = 'none';
-        // You might want to call a function here to display playlist details
+        if (!response.ok) throw new Error('Failed to fetch playlist tracks');
+        const data = await response.json();
+        //console.log('Playlist tracks:', data.items);
+        let artistsSet = new Set();
+        let artists = [];
+        data.items.forEach(track => {
+            track.track.artists.forEach(artist => {
+                artistsSet.add(artist.name);
+            });
+        });
+        artists = Array.from(artistsSet);
+        //console.log('Artists:', artists);
+        return artists;
     } catch (error) {
-        console.error('Error fetching playlist data:', error);
+        console.error('Error getting playlist tracks:', error);
     }
+}
+
+async function sendArtistsToBackend(artists) {
+    try {
+        const response = await fetch('/musicbrainz/artists', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ artists }) // Send artists array as JSON
+        });
+        if (!response.ok) throw new Error('Failed to send artists to backend');
+        const result = await response.json();
+        return result; // Handle the result from the backend
+    } catch (error) {
+        console.error('Error sending artists to backend:', error);
+    }
+}
+
+async function displayMap() {
+
 }
 
 document.addEventListener('DOMContentLoaded', checkSessionState);
