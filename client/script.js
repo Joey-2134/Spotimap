@@ -1,3 +1,23 @@
+import './style.css';
+import Map from 'ol/Map.js';
+import OSM from 'ol/source/OSM.js';
+import TileLayer from 'ol/layer/Tile.js';
+import View from 'ol/View.js';
+
+const map = new Map({
+  target: 'map',
+  layers: [
+    new TileLayer({
+      source: new OSM(),
+    }),
+  ],
+  view: new View({
+    center: [0, 0],
+    zoom: 2,
+  }),
+});
+
+
 // Async function to check session state
 async function checkSessionState() {
     try {
@@ -65,9 +85,10 @@ function createPlaylistItem(playlist) {
     playlistItem.addEventListener('click', async () => { // Note the async keyword here
         try {
             const artists = await handlePlaylistClick(playlist.id, playlist.name); // Wait for the promise to resolve
+            console.log('Artists:', artists);
             if (artists) {
-                await sendArtistsToBackend(artists); // Now we can send the artists to the backend
-                console.log(artists);
+                const artistAreas = await sendArtistsToBackend(artists); // Now we can send the artists to the backend
+                console.log(artistAreas); // Log the result from the backend
             }
         } catch (error) {
             console.error('Error processing playlist click:', error);
