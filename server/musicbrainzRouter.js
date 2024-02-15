@@ -1,10 +1,12 @@
 const express = require('express');
 const axios = require('axios');
+const fs = require('fs').promises;
 require('dotenv').config();
 const musicbrainzRouter = express.Router();
 
 musicbrainzRouter.post('/artists', async (req, res) => {
     try {
+        const validCountries = await getValidCountries(); // Retrieve the list of valid countries
         const artists = req.body.artists;
         let artistAreas = [];
 
@@ -12,7 +14,11 @@ musicbrainzRouter.post('/artists', async (req, res) => {
             await delay(1000);
             const artistData = await fetchArtistArea(artist);
             if (artistData.artists[0] && artistData.artists[0].area) {
-                artistAreas.push(artistData.artists[0].area.name);
+                // Check if the artist area is a valid country
+                const validCountry = validCountries.find(country => country.name === artistData.artists[0].area.name);
+                if (validCountry) {
+                    artistAreas.push(artistData.artists[0].area.name);
+                }
             }
         }
         //console.log('Artist Areas:', artistAreas); //test log
@@ -38,6 +44,11 @@ async function fetchArtistArea(artist) {
 
 function delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function getValidCountries() {
+    const data = await fs.readFile('countries.json', 'utf8'); // Replace with the correct path to your countries.json file
+    return JSON.parse(data);
 }
 
 

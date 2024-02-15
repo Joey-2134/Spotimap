@@ -1,22 +1,7 @@
 import './style.css';
 import Logo from './assets/spotimaplogo.png';
-// import Map from 'ol/Map.js';
-// import OSM from 'ol/source/OSM.js';
-// import TileLayer from 'ol/layer/Tile.js';
-// import View from 'ol/View.js';
 
-// const map = new Map({
-//   target: 'map',
-//   layers: [
-//     new TileLayer({
-//       source: new OSM(),
-//     }),
-//   ],
-//   view: new View({
-//     center: [0, 0],
-//     zoom: 2,
-//   }),
-// });
+
 // Async function to check session state
 async function checkSessionState() {
     document.getElementById('logo').src = Logo;
@@ -88,7 +73,10 @@ function createPlaylistItem(playlist) {
             console.log('Artists:', artists);
             if (artists) {
                 const artistAreas = await sendArtistsToBackend(artists); // Now we can send the artists to the backend
-                console.log(artistAreas); // Log the result from the backend
+                const uniqueCountriesSet = new Set(artistAreas.artistAreas);
+                const uniqueCountries = Array.from(uniqueCountriesSet);
+                console.log(artistAreas);
+                displayMap(uniqueCountries);
             }
         } catch (error) {
             console.error('Error processing playlist click:', error);
@@ -140,8 +128,48 @@ async function sendArtistsToBackend(artists) {
     }
 }
 
-async function displayMap() {
+function displayMap(artistAreas) {
+    console.log('Displaying map');
+    let fillColorExpression = ['match', ['get', 'name']];
+    console.log('Artist Areas:', artistAreas);
 
+    artistAreas.forEach(country => {
+        fillColorExpression.push(country, 'green');
+    });
+
+    fillColorExpression.push('rgba(0,0,0,0.5)');
+
+    document.getElementById('map').style.display = 'block';
+    mapboxgl.accessToken = 'pk.eyJ1Ijoiam9leTIxMzQiLCJhIjoiY2xzbjFzNjBvMG0wbTJsb2U5Y2M3cGNmYiJ9.Ixh8tilP7aDCEN2VHihvUQ';
+    const map = new mapboxgl.Map({
+        projection: 'mercator',
+        container: 'map', // container ID
+        style: 'mapbox://styles/mapbox/dark-v11', // style URL
+        center: [-20, 20], // starting position [lng, lat]
+        zoom: 2 // starting zoom
+    });
+
+    map.on('load', () => {
+        document.getElementById('map').style.display = 'block';
+
+        map.addSource('countries', {
+            type: 'geojson',
+            data: 'assets/countries.geo.json'
+        });
+
+        map.addLayer({
+            id: 'countries',
+            type: 'fill',
+            source: 'countries',
+            layout: {},
+            paint: {
+                'fill-color': fillColorExpression,
+                'fill-opacity': 0.4
+            }
+        });
+
+
+    });
 }
 
 document.addEventListener('DOMContentLoaded', checkSessionState);
