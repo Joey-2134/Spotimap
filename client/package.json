@@ -4,6 +4,7 @@
   },
   "devDependencies": {
     "css-loader": "^6.10.0",
+    "json-loader": "^0.5.7",
     "style-loader": "^3.3.4",
     "webpack": "^5.90.1",
     "webpack-cli": "^5.1.4"
@@ -13,7 +14,7 @@
   "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack"
+    "build": "webpack --watch --mode=development"
   },
   "keywords": [],
   "author": "",
