@@ -1,6 +1,8 @@
 import './style.css';
 import Logo from './assets/spotimaplogo.png';
 
+const mapboxAccessToken = process.env.MAPBOXAPITOKEN;
+
 
 // Async function to check session state
 async function checkSessionState() {
@@ -140,7 +142,7 @@ function displayMap(artistAreas) {
     fillColorExpression.push('rgba(0,0,0,0.5)');
 
     document.getElementById('map').style.display = 'block';
-    mapboxgl.accessToken = 'pk.eyJ1Ijoiam9leTIxMzQiLCJhIjoiY2xzbjFzNjBvMG0wbTJsb2U5Y2M3cGNmYiJ9.Ixh8tilP7aDCEN2VHihvUQ';
+    mapboxgl.accessToken = mapboxAccessToken;
     const map = new mapboxgl.Map({
         projection: 'mercator',
         container: 'map', // container ID
