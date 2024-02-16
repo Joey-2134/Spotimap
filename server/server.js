@@ -16,7 +16,7 @@ const client_id = process.env.CLIENT_ID;
 const client_secret = process.env.CLIENT_SECRET;
 const sessionSecret = process.env.SESSION_SECRET;
 
-const redirect_uri = 'http://78.18.103.165:3000/callback';
+const redirect_uri = 'http://localhost:3000/callback';
 const stateKey = 'spotify_auth_state';
 const PORT = process.env.PORT || 3000;
 
