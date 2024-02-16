@@ -18,6 +18,9 @@ module.exports = {
         { from: 'src/assets', to: 'assets' },
       ],
     }),
+    new webpack.DefinePlugin({
+      'process.env': JSON.stringify(process.env)
+    }),
   ],
  module: {
    rules: [

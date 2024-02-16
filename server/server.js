@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const axios = require('axios');
 const querystring = require('querystring');
+const cors = require('cors');
 
 const app = express();
 const spotifyRouter = require('./spotifyRouter');
@@ -15,7 +16,7 @@ const client_id = process.env.CLIENT_ID;
 const client_secret = process.env.CLIENT_SECRET;
 const sessionSecret = process.env.SESSION_SECRET;
 
-const redirect_uri = 'http://localhost:3000/callback';
+const redirect_uri = 'http://78.18.103.165:3000/callback';
 const stateKey = 'spotify_auth_state';
 const PORT = process.env.PORT || 3000;
 
@@ -27,7 +28,9 @@ app.use(session({
   saveUninitialized: true, 
   cookie: { httpOnly: true, maxAge: 60000, secure: false }  //add secure: true when switching to https
 }));
+app.use(cors());
 app.use(express.json());
+
 app.use((req, res, next) => {
   //console.log(req.session); // Log the session object
   next();
